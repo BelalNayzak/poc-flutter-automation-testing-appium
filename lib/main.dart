@@ -83,11 +83,11 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = false;
     });
-    if (mounted) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const SuccessScreen()),
-      );
-    }
+    // if (mounted) {
+    //   Navigator.of(context).push(
+    //     MaterialPageRoute(builder: (context) => const SuccessScreen()),
+    //   );
+    // }
   }
 
   @override
@@ -186,23 +186,24 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class SuccessScreen extends StatelessWidget {
-  const SuccessScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Success'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: const Center(
-        child: Text(
-          'Login Successful!',
-          key: Key('success_text'),
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-}
+//
+// class SuccessScreen extends StatelessWidget {
+//   const SuccessScreen({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Success'),
+//         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+//       ),
+//       body: const Center(
+//         child: Text(
+//           'Login Successful!',
+//           key: Key('success_text'),
+//           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+//         ),
+//       ),
+//     );
+//   }
+// }

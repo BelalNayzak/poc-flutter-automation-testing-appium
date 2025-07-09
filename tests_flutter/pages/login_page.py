@@ -19,7 +19,40 @@ class LoginPage:
             return welcome is not None
         except Exception:
             return False
-    
+
+
+
+
+
+#
+#
+#
+#
+#
+#     # from Zubair
+#     # from Zubair
+#     # from Zubair
+#     def click_certification_module(self):
+#         element = self.finder.by_text("Certifications")
+#         self.driver.execute_script("flutter:assertTappable", element)
+#         self.driver.execute_script("flutter:clickElement", element)
+#
+#     self.driver.execute_script("flutter:enterText", feedback_text)
+#
+#
+#     def click_backtolearnings(self):
+#         element = self.finder.by_value_key("result_screen_back_to_learning_button")
+#         self.driver.execute_script("flutter:waitFor", element, 3000)
+#         self.driver.execute_script("flutter:clickElement", element)
+#
+#
+#
+#
+#
+#
+
+
+
     def enter_phone_number(self, phone_number):
         phone_field = FlutterElement(self.driver, self.finder.by_value_key('phone_field'))
         phone_field.clear()

@@ -11,27 +11,27 @@ class TestLogin:
     def test_login_screen_elements_displayed(self, driver_android, platform):
         """Test that all login screen elements are displayed"""
         login_page = LoginPage(driver_android)
-        
+
         # Verify login screen is displayed
         assert login_page.is_login_screen_displayed(), "Login screen should be displayed"
-        
+
         print("✅ Login screen elements are displayed correctly")
-    
+
     @pytest.mark.parametrize("platform", ["android"], indirect=True)
     def test_empty_phone_validation(self, driver_android, platform):
         """Test validation for empty phone field"""
         login_page = LoginPage(driver_android)
-        
+
         # Leave phone field empty, enter password
         login_page.enter_password(Config.VALID_PASSWORD)
         login_page.click_login_button()
-        
+
         # Check for validation error
         time.sleep(1)  # Wait for validation to appear
         error_message = login_page.get_validation_error()
         assert error_message is not None, "Validation error should be displayed for empty phone"
         assert "Please enter your phone number" in error_message, f"Expected phone validation message, got: {error_message}"
-        
+
         print(f"✅ Empty phone validation test passed: {error_message}")
     
     @pytest.mark.parametrize("platform", ["android"], indirect=True)

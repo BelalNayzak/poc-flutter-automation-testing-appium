@@ -1,9 +1,11 @@
 import pytest
+import os
+import time
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
 from appium.options.ios import XCUITestOptions
-import os
-import time
+from appium.options.common import AppiumOptions
+from selenium.common.exceptions import WebDriverException
 
 
 class Config:
@@ -12,7 +14,8 @@ class Config:
     ANDROID_DEVICE_NAME = "emulator-5554"  # Change this to your device name
     ANDROID_APP_PACKAGE = "com.example.appium_testing_poc"
     ANDROID_APP_ACTIVITY = ".MainActivity"
-    
+    ANDROID_APK_PATH = "/Users/mazeed/StudioProjects/appium_testing_poc/build/app/outputs/flutter-apk/app-debug.apk"
+
     # iOS configuration  
     IOS_PLATFORM_NAME = "iOS"
     IOS_DEVICE_NAME = "iPhone 15"  # Change this to your simulator name
@@ -27,22 +30,33 @@ class Config:
     INVALID_PHONE = "123"
     INVALID_PASSWORD = "123"
 
+    # Retry configuration
+    MAX_RETRIES = 20
+    RETRY_DELAY = 5
 
+
+# @pytest.fixture(scope="function")
 @pytest.fixture(scope="session")
-def driver_android():
-    """Setup Android driver for testing"""
-    options = UiAutomator2Options()
-    options.platform_name = Config.ANDROID_PLATFORM_NAME
-    options.device_name = Config.ANDROID_DEVICE_NAME
-    options.app_package = Config.ANDROID_APP_PACKAGE
-    options.app_activity = Config.ANDROID_APP_ACTIVITY
-    options.automation_name = "Flutter"
-    options.no_reset = True
+def driver_android(request):
+    options = AppiumOptions()
+    options.set_capability("platformName", "Android")
+    options.set_capability("deviceName", Config.ANDROID_DEVICE_NAME)
+    options.set_capability("automationName", "Flutter")
+    options.set_capability("app", Config.ANDROID_APK_PATH)
+    options.set_capability("autoGrantPermissions", True)
+    # options.set_capability("noReset", True) # uncomment if need to disable app reset
 
-    driver = webdriver.Remote(Config.APPIUM_SERVER_URL, options=options)
-    driver.implicitly_wait(30)
-
-    yield driver
+    attempt = 0
+    while attempt < Config.MAX_RETRIES:
+        try:
+            driver = webdriver.Remote("http://127.0.0.1:4723", options=options)
+            yield driver
+            break
+        except WebDriverException as e:
+            attempt += 1
+            if attempt >= Config.MAX_RETRIES:
+                raise
+            time.sleep(Config.RETRY_DELAY)
 
     driver.quit()
 
