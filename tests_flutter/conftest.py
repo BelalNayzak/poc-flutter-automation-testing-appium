@@ -35,7 +35,7 @@ class Config:
     RETRY_DELAY = 5
 
 
-# @pytest.fixture(scope="function")
+# @pytest.fixture(scope="session") # uncomment if need to disable app reset
 @pytest.fixture(scope="function")
 def driver_android(request):
     options = AppiumOptions()

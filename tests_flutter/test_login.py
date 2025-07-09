@@ -86,29 +86,6 @@ class TestLogin:
         assert "Password must be at least 6 characters" in error_message, f"Expected validation message, got: {error_message}"
         
         print(f"✅ Invalid password validation test passed: {error_message}")
-    
-    # @pytest.mark.parametrize("platform", ["android"], indirect=True) 
-    # def test_multiple_login_attempts(self, driver_android, platform):
-    #     """Test multiple login attempts in sequence"""
-    #     login_page = LoginPage(driver_android)
-        
-    #     # First attempt with invalid data
-    #     login_page.perform_login(Config.INVALID_PHONE, Config.INVALID_PASSWORD)
-    #     time.sleep(1)
-    #     # We expect both phone and password errors, so check for both
-    #     phone_error = login_page.get_phone_validation_error()
-    #     password_error = login_page.get_password_validation_error()
-    #     assert phone_error is not None, "Should show phone validation error for first attempt"
-    #     assert "Phone number must be at least 10 digits" in phone_error, f"Expected phone validation message, got: {phone_error}"
-    #     assert password_error is not None, "Should show password validation error for first attempt"
-    #     assert "Password must be at least 6 characters" in password_error, f"Expected password validation message, got: {password_error}"
-        
-    #     # Second attempt with valid data - just check that form can be filled again
-    #     login_page.perform_login(Config.VALID_PHONE, Config.VALID_PASSWORD)
-    #     phone_text = login_page.get_phone_field_text()
-    #     assert Config.VALID_PHONE in phone_text, "Should be able to perform multiple attempts"
-        
-    #     print("✅ Multiple login attempts test passed")
 
     @pytest.mark.parametrize("platform", ["android"], indirect=True)
     def test_successful_login(self, driver_android, platform):

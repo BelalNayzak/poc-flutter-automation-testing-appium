@@ -41,7 +41,7 @@ class LoginPage:
         except Exception:
             return False
     
-    def wait_for_loading_to_complete(self, timeout=20):
+    def wait_for_loading_to_complete(self, timeout=10):
         start_time = time.time()
         # First, wait for the loading indicator to appear
         appeared = False
@@ -75,7 +75,7 @@ class LoginPage:
         phone_field = FlutterElement(self.driver, self.finder.by_value_key('phone_field'))
         return phone_field.text
     
-    def get_validation_error(self, key, timeout=20):
+    def get_validation_error(self, key, timeout=10):
         start_time = time.time()
         while time.time() - start_time < timeout:
             try:
