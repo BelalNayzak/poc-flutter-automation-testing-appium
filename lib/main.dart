@@ -130,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.only(top: 4.0),
                   child: Text(
                     _phoneError!,
-                    key: const Key('validation_error'),
+                    key: const Key('phone_validation_error'),
                     style: const TextStyle(color: Colors.red, fontSize: 14),
                   ),
                 ),
@@ -152,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.only(top: 4.0),
                   child: Text(
                     _passwordError!,
-                    key: const Key('validation_error'),
+                    key: const Key('password_validation_error'),
                     style: const TextStyle(color: Colors.red, fontSize: 14),
                   ),
                 ),

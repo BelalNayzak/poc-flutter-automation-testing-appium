@@ -1,7 +1,5 @@
 from appium_flutter_finder.flutter_finder import FlutterFinder, FlutterElement
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException
 import time
 
 
@@ -11,7 +9,6 @@ class LoginPage:
     def __init__(self, driver):
         self.driver = driver
         self.finder = FlutterFinder()
-        self.wait = WebDriverWait(driver, 10)
         
     def is_login_screen_displayed(self):
         try:
@@ -19,39 +16,6 @@ class LoginPage:
             return welcome is not None
         except Exception:
             return False
-
-
-
-
-
-#
-#
-#
-#
-#
-#     # from Zubair
-#     # from Zubair
-#     # from Zubair
-#     def click_certification_module(self):
-#         element = self.finder.by_text("Certifications")
-#         self.driver.execute_script("flutter:assertTappable", element)
-#         self.driver.execute_script("flutter:clickElement", element)
-#
-#     self.driver.execute_script("flutter:enterText", feedback_text)
-#
-#
-#     def click_backtolearnings(self):
-#         element = self.finder.by_value_key("result_screen_back_to_learning_button")
-#         self.driver.execute_script("flutter:waitFor", element, 3000)
-#         self.driver.execute_script("flutter:clickElement", element)
-#
-#
-#
-#
-#
-#
-
-
 
     def enter_phone_number(self, phone_number):
         phone_field = FlutterElement(self.driver, self.finder.by_value_key('phone_field'))
@@ -73,17 +37,31 @@ class LoginPage:
     def is_loading_indicator_visible(self):
         try:
             loading = FlutterElement(self.driver, self.finder.by_value_key('loading_indicator'))
-            return loading is not None
+            return loading.is_displayed()
         except Exception:
             return False
     
-    def wait_for_loading_to_complete(self, timeout=15):
-        end_time = time.time() + timeout
-        while time.time() < end_time:
-            if not self.is_loading_indicator_visible():
-                return True
+    def wait_for_loading_to_complete(self, timeout=20):
+        start_time = time.time()
+        # First, wait for the loading indicator to appear
+        appeared = False
+        while time.time() - start_time < timeout:
+            if self.is_loading_indicator_visible():
+                appeared = True
+                break
             time.sleep(0.5)
-        return False
+        
+        # Then, wait for the loading indicator to disappear if it appeared
+        if appeared:
+            start_time = time.time()
+            while time.time() - start_time < timeout:
+                if not self.is_loading_indicator_visible():
+                    return True
+                time.sleep(0.5)
+            return False # Timeout: loading indicator did not disappear
+        else:
+            # If loading indicator never appeared, assume loading is complete.
+            return True
     
     def get_success_message_text(self):
         # On navigation, check for SuccessScreen text
@@ -97,13 +75,24 @@ class LoginPage:
         phone_field = FlutterElement(self.driver, self.finder.by_value_key('phone_field'))
         return phone_field.text
     
-    def get_validation_error(self):
-        # Return the text of the first widget with Key('validation_error'), or None if not found
-        try:
-            error_widget = FlutterElement(self.driver, self.finder.by_value_key('validation_error'))
-            return error_widget.text
-        except Exception:
-            return None
+    def get_validation_error(self, key, timeout=20):
+        start_time = time.time()
+        while time.time() - start_time < timeout:
+            try:
+                error_widget = FlutterElement(self.driver, self.finder.by_value_key(key))
+                return error_widget.text
+            except NoSuchElementException:
+                pass  # Element not found yet, keep trying
+            except Exception:
+                pass # Catch other exceptions during element interaction
+            time.sleep(0.2) # Small delay to avoid busy-waiting
+        return None # Timeout, element never became visible or found
+
+    def get_phone_validation_error(self):
+        return self.get_validation_error(key='phone_validation_error')
+    
+    def get_password_validation_error(self):
+        return self.get_validation_error(key='password_validation_error')
     
     def is_success_message_displayed(self):
         return self.get_success_message_text() is not None
@@ -112,4 +101,5 @@ class LoginPage:
         self.enter_phone_number(phone_number)
         self.enter_password(password)
         self.click_login_button()
+        self.wait_for_loading_to_complete()
         return self

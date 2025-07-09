@@ -36,7 +36,7 @@ class Config:
 
 
 # @pytest.fixture(scope="function")
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def driver_android(request):
     options = AppiumOptions()
     options.set_capability("platformName", "Android")
