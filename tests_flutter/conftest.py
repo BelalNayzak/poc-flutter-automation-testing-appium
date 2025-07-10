@@ -67,6 +67,7 @@ def driver_android(request):
                 driver.quit()
 
 
+# @pytest.fixture(scope="session") # uncomment if need to disable app reset
 @pytest.fixture(scope="function")
 def driver_ios():
     """Setup iOS driver for testing"""

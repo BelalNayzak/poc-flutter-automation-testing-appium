@@ -345,12 +345,62 @@ python run_tests.py</code></pre>
 
         <h3>6.3 iOS-Specific Issues</h3>
         <ul>
-          <li><b>Local Network Permission:</b> Your app <b>must</b> request and be granted Local Network access for Appium Flutter Driver to work. This is not needed for standard Appium/XCUITest, but is <b>required for Flutter Driver</b> (see error: <code>Could not register as server for FlutterDartVMServicePublisher, permission denied</code>).</li>
-          <li><b>Info.plist:</b> Must contain <code>NSLocalNetworkUsageDescription</code> (single key) and <code>NSBonjourServices</code> (array with <code>_dartVmService._tcp</code> and <code>_dartobservatory._tcp</code>).</li>
-          <li><b>Entitlements:</b> <code>Runner.entitlements</code> must have <code>com.apple.developer.networking.multicast</code> set to <code>true</code>. Add the "Multicast Networking" capability in Xcode if missing.</li>
-          <li><b>Simulator:</b> If changes don't take effect, <b>delete the app</b> from the simulator, <b>reset the simulator</b> (erase all content), and rebuild/reinstall.</li>
-          <li><b>Settings:</b> After running the app, check <b>Settings &gt; Privacy &amp; Security &gt; Local Network</b> in the simulator. Your app must appear and be toggled ON.</li>
+          <li><b>Local Network Permission Error:</b> If you see <code>Could not register as server for FlutterDartVMServicePublisher, permission denied</code> or <b>Lost connection to device</b>, your app is being blocked from publishing the Dart VM service over the local network. This is required for Appium Flutter Driver to work on iOS.</li>
+          <li><b>Root Cause:</b> iOS requires explicit permission and configuration for local network access. Without it, the Dart VM service cannot be published and Appium cannot communicate with your app.</li>
+          <li><b>Solution Steps:</b>
+            <ol>
+              <li>In <b>Info.plist</b>, ensure you have:
+                <ul>
+                  <li>One <code>NSLocalNetworkUsageDescription</code> key with a clear message.</li>
+                  <li>One <code>NSBonjourServices</code> array containing both <code>_dartVmService._tcp</code> and <code>_dartobservatory._tcp</code>.</li>
+                </ul>
+              </li>
+              <li>In <b>Runner.entitlements</b>, add <code>com.apple.developer.networking.multicast</code> set to <code>true</code>.</li>
+              <li>In Xcode, open your project, select the Runner target, go to <b>Signing & Capabilities</b>, and add the <b>Multicast Networking</b> capability.</li>
+              <li>Delete the app from the simulator if you made any changes to Info.plist or entitlements.</li>
+              <li>Clean and rebuild:
+                <pre><code>flutter clean
+cd ios
+rm -rf build/
+cd ..
+flutter build ios --simulator
+flutter run --debug --disable-service-auth-codes
+</code></pre>
+              </li>
+              <li>After launching, open the simulator's <b>Settings &gt; Privacy &amp; Security &gt; Local Network</b> and ensure your app is listed and toggled ON.</li>
+              <li>If the app is not listed, or the error persists, <b>reset the simulator</b> (erase all content) and repeat the above steps.</li>
+              <li>Always use the latest <code>appium-flutter-driver</code> and Appium server.</li>
+            </ol>
+          </li>
+          <li><b>Other iOS Issues:</b>
+            <ul>
+              <li>Make sure your app is built in debug mode and includes <code>enableFlutterDriverExtension()</code> in <code>main.dart</code>.</li>
+              <li>Do not use release builds or production apps for Flutter Driver automation.</li>
+              <li>If you want to automate any app (not just your own), use the native driver (<code>XCUITest</code>), not the Flutter Driver.</li>
+            </ul>
+          </li>
         </ul>
+        <div class="warning">
+          <strong>Checklist: Fixing 'Local Network' and 'Lost connection to device' on iOS</strong>
+          <ol>
+            <li>Check <b>Info.plist</b> for correct <code>NSLocalNetworkUsageDescription</code> and <code>NSBonjourServices</code> (with both required services).</li>
+            <li>Check <b>Runner.entitlements</b> for <code>com.apple.developer.networking.multicast</code> = <code>true</code>.</li>
+            <li>Add <b>Multicast Networking</b> capability in Xcode.</li>
+            <li>Delete the app from the simulator after making changes.</li>
+            <li>Run:
+              <pre><code>flutter clean
+cd ios
+rm -rf build/
+cd ..
+flutter build ios --simulator
+flutter run --debug --disable-service-auth-codes
+</code></pre>
+            </li>
+            <li>Check <b>Settings &gt; Privacy &amp; Security &gt; Local Network</b> in the simulator and toggle your app ON.</li>
+            <li>If still failing, reset the simulator and repeat.</li>
+            <li>Update to the latest <code>appium-flutter-driver</code> and Appium server.</li>
+          </ol>
+        </div>
     </div>
 </body>
 </html> 
