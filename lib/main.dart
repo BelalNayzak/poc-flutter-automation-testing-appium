@@ -1,10 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
+// import 'dart:io';
+// import 'package:multicast_dns/multicast_dns.dart';
+import 'dart:developer' as developer;
+
 
 void main() {
+  // testLocalNetwork();
+  // triggerBonjourDiscovery();
+
+  // Enable VM service
+  developer.Service.controlWebServer(enable: true);
+
   enableFlutterDriverExtension();
   runApp(const MyApp());
 }
+
+// void testLocalNetwork() async {
+//   try {
+//     // محاولة فتح socket على شبكة محلية (ليس localhost)
+//     final socket = await Socket.connect('192.168.1.1', 80, timeout: Duration(seconds: 2));
+//     socket.destroy();
+//   } catch (_) {
+//     debugPrint("Local network test completed");
+//   }
+// }
+
+// void triggerBonjourDiscovery() async {
+//   final mdns = MDnsClient();
+//   await mdns.start();
+//   // نعمل بحث عن أي service وهمية
+//   await for (final PtrResourceRecord ptr in mdns.lookup<PtrResourceRecord>(
+//     ResourceRecordQuery.serverPointer('_http._tcp.local'),
+//   )) {
+//     break; // بمجرد يحصل بحث، macOS يطلب الصلاحية
+//   }
+//   mdns.stop();
+// }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

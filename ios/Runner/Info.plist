@@ -2,6 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
+
+
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app uses local network to communicate with Flutter development tools and Appium Flutter Driver.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartVmService._tcp</string>
+		<string>_dartobservatory._tcp</string>
+	</array>
+
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+
+	
+	
+	
+	<key>NSAppTransportSecurity</key>
+	<dict/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+
+	
+	
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -41,9 +65,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
 </dict>
 </plist>

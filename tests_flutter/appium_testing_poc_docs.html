@@ -111,8 +111,8 @@
 
         <div class="meta">
             <p><strong>Author: </strong>  Belal Ashraf  |  Sr. Flutter Developer (Android, iOS, Web)</p>
-            <p><strong>Version: </strong>  1.0</p>
-            <p><strong>Date: </strong>  July 2, 2025</p>
+            <p><strong>Version: </strong>  2.0</p>
+            <p><strong>Date: </strong>  July 10, 2025</p>
         </div>
 
         <!-- Section 1: Project Overview -->
@@ -120,10 +120,37 @@
         <p>This project is a Proof-of-Concept (POC) designed to demonstrate a complete workflow for setting up and running automated tests for a Flutter application using Appium. It integrates Flutter (for the mobile app), Python with <code>pytest</code> (for writing and running tests), and the <strong>Appium Flutter Driver</strong> to bridge the two.</p>
         <p>The primary goal is to establish a reliable, repeatable process for mobile test automation and to document the solutions to common challenges encountered during setup.</p>
 
-        <!-- Section 2: Appium Flutter Driver Details -->
-        <h2>2. Understanding the Appium Flutter Driver</h2>
+        <!-- Section 2: App Under Test: .apk/.app vs. PackageId/BundleId -->
+        <h2>2. App Under Test:</h2>
+        <p>You can execute your tests in two ways, depending on your workflow and environment:</p>
+        <ul>
+          <li><b>With .apk/.app file:</b> Provide the path to your built <code>.apk</code> (Android) or <code>.app</code> (iOS) file in your Appium capabilities.<br>
+            Example capability:<br>
+            <pre><code>'app': '/path/to/your/app.apk'</code></pre>
+          </li>
+          <li><b>Without .apk/.app file:</b> If the app is already installed, specify the <code>appPackage</code> (Android) or <code>bundleId</code> (iOS) in your capabilities.<br>
+            Example capabilities:<br>
+            <pre><code>'appPackage': 'com.example.yourapp'  # Android
+'bundleId': 'com.example.yourapp'   # iOS</code></pre>
+          </li>
+        </ul>
+        <p>Choose the method that fits your workflow and CI/CD setup.</p>
+        <div class="note">
+          You can also test any existing app already installed on your device—even if it's not your own—by specifying its <code>appPackage</code> (Android) or <code>bundleId</code> (iOS) in your Appium capabilities.<br>
+          <b>However:</b> For non-Flutter apps, or Flutter apps you don't own (or not built in debug mode with the driver extension), you <b>must</b> use the native drivers (<code>UiAutomator2</code> for Android, <code>XCUITest</code> for iOS).<br>
+          <b>Appium Flutter Driver</b> only works for your own Flutter apps built in debug mode with <code>enableFlutterDriverExtension()</code> enabled.
+        </div>
+
+        <!-- Section 3: Understanding the Appium Flutter Driver -->
+        <h2>3. Understanding the Appium Flutter Driver</h2>
         <p>The magic behind this testing setup is the <code>appium-flutter-driver</code>. It's an Appium driver that allows you to automate Flutter applications by leveraging Flutter's own testing and debugging capabilities.</p>
         
+        <div class="note">
+            <strong>Flutter Driver  -vs-  Native Drivers (XCUITest/UiAutomator2):</strong><br>
+            For deep dive on the differences between Appium Flutter Driver and Native Drivers (XCUITest/UiAutomator2), when to use each, and the pros and cons of each, check this link:<br>
+            <a href="https://claude.ai/share/d686ec26-d483-4a89-9381-7dd77de2ea77" target="_blank">https://claude.ai/share/d686ec26-d483-4a89-9381-7dd77de2ea77</a>
+        </div>
+
         <h3>Key Concepts</h3>
         <ul>
             <li>
@@ -136,12 +163,12 @@
                 <strong>ADB Port Forwarding:</strong> The Dart VM Service runs on the Android device/emulator, not on your local machine. To make it accessible to Appium (which runs on your machine), you must forward a local port to the device's port using the Android Debug Bridge (<code>adb</code>). For example: <code>adb forward tcp:60000 tcp:60000</code>.
             </li>
         </ul>
-        <div class="note">
+        <div class="warning">
             <strong>Key takeaway:</strong> The entire process relies on Appium successfully connecting to the Dart VM Service's WebSocket. Any issue with port forwarding, auth codes, or driver versions will break this connection.
         </div>
 
-        <!-- Section 3: File Structure and Code Documentation -->
-        <h2>3. Code Documentation and File Structure</h2>
+        <!-- Section 4: File Structure and Code Documentation -->
+        <h2>4. Code Documentation and File Structure</h2>
         <p>The project is organized to separate the Flutter application from the Python test suite.</p>
 
         <h3>Flutter App: <code>lib/main.dart</code></h3>
@@ -188,8 +215,8 @@ TextFormField(
             </tbody>
         </table>
 
-        <!-- Section 4: The Reliable Manual Workflow -->
-        <h2>4. The Reliable Manual Workflow to Execute Tests</h2>
+        <!-- Section 5: The Reliable Manual Workflow -->
+        <h2>5. The Reliable Manual Workflow to Execute Tests</h2>
         <p>This step-by-step process is the most reliable way to run the tests, as it avoids the timing and process management issues of a fully automated script. Follow it exactly.</p>
 
         <ol>
@@ -240,11 +267,29 @@ cd tests_flutter
 
 # Run the tests
 python run_tests.py</code></pre>
+                <div class="note">
+                  <strong>Customizations:</strong><br>
+                  <ul>
+                    <li><b>Specify Platform:</b> To run tests for a specific platform, add <code>--platform android</code> or <code>--platform ios</code>.<br>
+                      Example:<br>
+                      <pre><code>python run_tests.py --platform android</code></pre>
+                    </li>
+                    <li><b>Generate HTML Report:</b> To output results to an HTML file, add <code>--html=report.html --self-contained-html</code>.<br>
+                      Example:<br>
+                      <pre><code>python run_tests.py --html=report.html --self-contained-html</code></pre>
+                    </li>
+                    <li><b>Combine Both:</b> You can combine both options:<br>
+                      Example:<br>
+                      <pre><code>python run_tests.py --platform ios --html=report.html --self-contained-html</code></pre>
+                    </li>
+                  </ul>
+                </div>
             </li>
         </ol>
 
-        <!-- Section 5: Troubleshooting -->
-        <h2>5. Troubleshooting Common Issues</h2>
+        <!-- Section 6: Troubleshooting & Platform-Specific Guidance -->
+        <h2>6. Troubleshooting & Platform-Specific Guidance</h2>
+        <h3>6.1 General Troubleshooting</h3>
         <table>
             <thead>
                 <tr>
@@ -279,9 +324,33 @@ python run_tests.py</code></pre>
                     <td>The test runner's check failed to find a running Appium server before executing tests.</td>
                     <td>Start the Appium server manually in a separate terminal with the <code>appium</code> command.</td>
                 </tr>
+                <tr>
+                    <td><code>NotYetImplementedError</code> or <code>TimeoutException</code></td>
+                    <td>Appium Flutter Driver is outdated or incompatible with your Flutter SDK.</td>
+                    <td>Update the driver using:<br><code>appium driver install --source=npm appium-flutter-driver</code></td>
+                </tr>
+                <tr>
+                    <td>Tests hang or fail unexpectedly</td>
+                    <td>Old processes, stale builds, or environment issues.</td>
+                    <td>Kill all old processes (<code>killall -9 dart flutter node appium || true</code>), clean builds, and restart everything.</td>
+                </tr>
             </tbody>
         </table>
 
+        <h3>6.2 Android-Specific Issues</h3>
+        <ul>
+          <li><b>Port Forwarding:</b> Always use the <b>current</b> Dart VM Service port from <code>flutter run</code> output for <code>adb forward</code>. If mismatched, Appium cannot connect.</li>
+          <li><b>Driver Version:</b> Ensure <code>appium-flutter-driver</code> is up to date and compatible with your Flutter SDK. If you see <code>NotYetImplementedError</code> or <code>TimeoutException</code>, update the driver using:<br><code>appium driver install --source=npm appium-flutter-driver</code></li>
+        </ul>
+
+        <h3>6.3 iOS-Specific Issues</h3>
+        <ul>
+          <li><b>Local Network Permission:</b> Your app <b>must</b> request and be granted Local Network access for Appium Flutter Driver to work. This is not needed for standard Appium/XCUITest, but is <b>required for Flutter Driver</b> (see error: <code>Could not register as server for FlutterDartVMServicePublisher, permission denied</code>).</li>
+          <li><b>Info.plist:</b> Must contain <code>NSLocalNetworkUsageDescription</code> (single key) and <code>NSBonjourServices</code> (array with <code>_dartVmService._tcp</code> and <code>_dartobservatory._tcp</code>).</li>
+          <li><b>Entitlements:</b> <code>Runner.entitlements</code> must have <code>com.apple.developer.networking.multicast</code> set to <code>true</code>. Add the "Multicast Networking" capability in Xcode if missing.</li>
+          <li><b>Simulator:</b> If changes don't take effect, <b>delete the app</b> from the simulator, <b>reset the simulator</b> (erase all content), and rebuild/reinstall.</li>
+          <li><b>Settings:</b> After running the app, check <b>Settings &gt; Privacy &amp; Security &gt; Local Network</b> in the simulator. Your app must appear and be toggled ON.</li>
+        </ul>
     </div>
 </body>
 </html> 
