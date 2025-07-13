@@ -133,8 +133,274 @@
             <strong>✅ VERIFIED WORKING:</strong> All 6 test cases pass on both Android and iOS platforms with the current implementation.
         </div>
 
-        <!-- Section 2: App Under Test: .apk/.app vs. PackageId/BundleId -->
-        <h2>2. App Under Test:</h2>
+        <!-- Section 2: Environment Setup Guide -->
+        <h2>2. Environment Setup Guide</h2>
+        <p>This section provides a comprehensive step-by-step guide to set up your environment for running Appium Flutter tests. Follow these instructions carefully to ensure a successful setup.</p>
+
+        <h3>2.1 Prerequisites</h3>
+        <p>Before starting the setup, ensure you have the following installed on your system:</p>
+        <ul>
+            <li><strong>Flutter SDK</strong> (latest stable version)</li>
+            <li><strong>Python 3.8+</strong> with pip</li>
+            <li><strong>Node.js</strong> (for Appium)</li>
+            <li><strong>Android Studio</strong> (for Android development)</li>
+            <li><strong>Xcode</strong> (for iOS development, macOS only)</li>
+            <li><strong>Java Development Kit (JDK)</strong> 8 or higher</li>
+        </ul>
+
+        <h3>2.2 Step-by-Step Setup Instructions</h3>
+
+        <h4>Step 1: Install Flutter SDK</h4>
+        <ol>
+            <li>Download Flutter SDK from <a href="https://flutter.dev/docs/get-started/install" target="_blank">flutter.dev</a></li>
+            <li>Extract to a desired location (e.g., <code>/Users/username/flutter</code>)</li>
+            <li>Add Flutter to your PATH:
+                <pre><code>export PATH="$PATH:/Users/username/flutter/bin"</code></pre>
+            </li>
+            <li>Run Flutter doctor to verify installation:
+                <pre><code>flutter doctor</code></pre>
+            </li>
+            <li>Install any missing dependencies reported by Flutter doctor</li>
+        </ol>
+
+        <h4>Step 2: Install Python Dependencies</h4>
+        <ol>
+            <li>Navigate to the project directory:
+                <pre><code>cd /path/to/appium_testing_poc</code></pre>
+            </li>
+            <li>Create a Python virtual environment:
+                <pre><code>python3 -m venv tests_flutter/venv</code></pre>
+            </li>
+            <li>Activate the virtual environment:
+                <pre><code># On macOS/Linux:
+source tests_flutter/venv/bin/activate
+
+# On Windows:
+tests_flutter\venv\Scripts\activate</code></pre>
+            </li>
+            <li>Install required Python packages:
+                <pre><code>cd tests_flutter
+pip install -r requirements.txt</code></pre>
+            </li>
+        </ol>
+
+        <h4>Step 3: Install Appium and Drivers</h4>
+        <ol>
+            <li>Install Appium globally:
+                <pre><code>npm install -g appium</code></pre>
+            </li>
+            <li>Install Appium Flutter Driver:
+                <pre><code>appium driver install --source=npm appium-flutter-driver</code></pre>
+            </li>
+            <li>Install Appium Flutter Finder:
+                <pre><code>pip install appium-flutter-finder==0.3.0</code></pre>
+            </li>
+            <li>Verify Appium installation:
+                <pre><code>appium --version</code></pre>
+            </li>
+        </ol>
+
+        <h4>Step 4: Android Setup</h4>
+        <ol>
+            <li>Install Android Studio and Android SDK</li>
+            <li>Set up Android environment variables:
+                <pre><code>export ANDROID_HOME=/Users/username/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools</code></pre>
+            </li>
+            <li>Create an Android Virtual Device (AVD):
+                <pre><code># List available devices
+avdmanager list avd
+
+# Create a new AVD (if needed)
+avdmanager create avd -n "Pixel_4_API_30" -k "system-images;android-30;google_apis;x86"</code></pre>
+            </li>
+            <li>Start the Android emulator:
+                <pre><code>emulator -avd Pixel_4_API_30</code></pre>
+            </li>
+            <li>Verify device connection:
+                <pre><code>adb devices</code></pre>
+            </li>
+        </ol>
+
+        <h4>Step 5: iOS Setup (macOS only)</h4>
+        <ol>
+            <li>Install Xcode from the Mac App Store</li>
+            <li>Install Xcode Command Line Tools:
+                <pre><code>xcode-select --install</code></pre>
+            </li>
+            <li>Accept Xcode license:
+                <pre><code>sudo xcodebuild -license accept</code></pre>
+            </li>
+            <li>Install iOS Simulator:
+                <pre><code>xcrun simctl list devices</code></pre>
+            </li>
+            <li>Start iOS Simulator:
+                <pre><code>open -a Simulator</code></pre>
+            </li>
+            <li>Boot a specific device:
+                <pre><code>xcrun simctl boot "iPhone 16 Plus"</code></pre>
+            </li>
+        </ol>
+
+        <h4>Step 6: Build the Flutter App</h4>
+        <ol>
+            <li>Navigate to the project root:
+                <pre><code>cd /path/to/appium_testing_poc</code></pre>
+            </li>
+            <li>Get Flutter dependencies:
+                <pre><code>flutter pub get</code></pre>
+            </li>
+            <li>Build the app for Android:
+                <pre><code>flutter build apk --debug</code></pre>
+            </li>
+            <li>Build the app for iOS:
+                <pre><code>flutter build ios --debug --simulator</code></pre>
+            </li>
+        </ol>
+
+        <h4>Step 7: Configure Test Environment</h4>
+        <ol>
+            <li>Update device names in <code>tests_flutter/conftest.py</code>:
+                <pre><code># For Android
+ANDROID_DEVICE_NAME = "emulator-5554"  # Your actual device name
+
+# For iOS  
+IOS_DEVICE_NAME = "iPhone 16 Plus"  # Your actual device name</code></pre>
+            </li>
+            <li>Update app paths if needed:
+                <pre><code># Android APK path
+ANDROID_APK_PATH = "/path/to/your/app-debug.apk"
+
+# iOS app path
+IOS_APP_PATH = "/path/to/your/Runner.app"</code></pre>
+            </li>
+        </ol>
+
+        <h3>2.3 Verification Steps</h3>
+        <p>After completing the setup, verify everything is working:</p>
+        <ol>
+            <li><strong>Flutter:</strong> <code>flutter doctor</code></li>
+            <li><strong>Python:</strong> <code>python --version</code></li>
+            <li><strong>Appium:</strong> <code>appium --version</code></li>
+            <li><strong>Android:</strong> <code>adb devices</code></li>
+            <li><strong>iOS:</strong> <code>xcrun simctl list devices</code></li>
+        </ol>
+
+        <h3>2.4 Common Setup Issues and Solutions</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Issue</th>
+                    <th>Solution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Flutter not found</td>
+                    <td>Add Flutter to PATH and restart terminal</td>
+                </tr>
+                <tr>
+                    <td>Python virtual environment not activated</td>
+                    <td>Run <code>source tests_flutter/venv/bin/activate</code></td>
+                </tr>
+                <tr>
+                    <td>Appium not installed</td>
+                    <td>Run <code>npm install -g appium</code></td>
+                </tr>
+                <tr>
+                    <td>Android emulator not starting</td>
+                    <td>Check AVD list and create new AVD if needed</td>
+                </tr>
+                <tr>
+                    <td>iOS Simulator not available</td>
+                    <td>Install Xcode and accept license</td>
+                </tr>
+                <tr>
+                    <td>Device not detected</td>
+                    <td>Check USB debugging (Android) or simulator status (iOS)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note">
+            <strong>💡 Pro Tip:</strong> Keep your development environment updated. Regularly update Flutter, Python packages, and Appium drivers to avoid compatibility issues.
+        </div>
+
+        <h3>2.5 Quick Setup Reference</h3>
+        <p>Here's a quick reference for the most common setup commands:</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Command</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Check Flutter</td>
+                    <td><code>flutter doctor</code></td>
+                    <td>Verify Flutter installation and dependencies</td>
+                </tr>
+                <tr>
+                    <td>Activate Python venv</td>
+                    <td><code>source tests_flutter/venv/bin/activate</code></td>
+                    <td>Activate the Python virtual environment</td>
+                </tr>
+                <tr>
+                    <td>Install Python deps</td>
+                    <td><code>pip install -r requirements.txt</code></td>
+                    <td>Install required Python packages</td>
+                </tr>
+                <tr>
+                    <td>Install Appium</td>
+                    <td><code>npm install -g appium</code></td>
+                    <td>Install Appium globally</td>
+                </tr>
+                <tr>
+                    <td>Install Flutter Driver</td>
+                    <td><code>appium driver install --source=npm appium-flutter-driver</code></td>
+                    <td>Install Appium Flutter Driver</td>
+                </tr>
+                <tr>
+                    <td>List Android devices</td>
+                    <td><code>adb devices</code></td>
+                    <td>Check connected Android devices/emulators</td>
+                </tr>
+                <tr>
+                    <td>List iOS devices</td>
+                    <td><code>xcrun simctl list devices</code></td>
+                    <td>Check available iOS simulators</td>
+                </tr>
+                <tr>
+                    <td>Build Android app</td>
+                    <td><code>flutter build apk --debug</code></td>
+                    <td>Build debug APK for Android</td>
+                </tr>
+                <tr>
+                    <td>Build iOS app</td>
+                    <td><code>flutter build ios --debug --simulator</code></td>
+                    <td>Build debug app for iOS simulator</td>
+                </tr>
+                <tr>
+                    <td>Run Android tests</td>
+                    <td><code>python -m pytest test_login.py -v --platform android</code></td>
+                    <td>Run tests on Android platform</td>
+                </tr>
+                <tr>
+                    <td>Run iOS tests</td>
+                    <td><code>python -m pytest test_login.py -v --platform ios</code></td>
+                    <td>Run tests on iOS platform</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Section 3: App Under Test: .apk/.app vs. PackageId/BundleId -->
+        <h2>3. App Under Test:</h2>
         <p>You can execute your tests in two ways, depending on your workflow and environment:</p>
         <ul>
           <li><b>With .apk/.app file:</b> Provide the path to your built <code>.apk</code> (Android) or <code>.app</code> (iOS) file in your Appium capabilities.<br>
@@ -155,8 +421,8 @@
           <b>Appium Flutter Driver</b> only works for your own Flutter apps built in debug mode with <code>enableFlutterDriverExtension()</code> enabled.
         </div>
 
-        <!-- Section 3: Understanding the Appium Flutter Driver -->
-        <h2>3. Understanding the Appium Flutter Driver</h2>
+        <!-- Section 4: Understanding the Appium Flutter Driver -->
+        <h2>4. Understanding the Appium Flutter Driver</h2>
         <p>The magic behind this testing setup is the <code>appium-flutter-driver</code>. It's an Appium driver that allows you to automate Flutter applications by leveraging Flutter's own testing and debugging capabilities.</p>
         
         <div class="note">
@@ -184,8 +450,8 @@
             <strong>Key takeaway:</strong> The entire process relies on Appium successfully connecting to the Dart VM Service's WebSocket. Any issue with port forwarding, auth codes, or driver versions will break this connection.
         </div>
 
-        <!-- Section 4: File Structure and Code Documentation -->
-        <h2>4. Code Documentation and File Structure</h2>
+        <!-- Section 5: File Structure and Code Documentation -->
+        <h2>5. Code Documentation and File Structure</h2>
         <p>The project is organized to separate the Flutter application from the Python test suite.</p>
 
         <h3>Flutter App: <code>lib/main.dart</code></h3>
@@ -232,8 +498,8 @@ TextFormField(
             </tbody>
         </table>
 
-        <!-- Section 5: The Reliable Manual Workflow -->
-        <h2>5. The Reliable Manual Workflow to Execute Tests</h2>
+        <!-- Section 6: The Reliable Manual Workflow -->
+        <h2>6. The Reliable Manual Workflow to Execute Tests</h2>
         <p>This step-by-step process is the most reliable way to run the tests, as it avoids the timing and process management issues of a fully automated script. Follow it exactly.</p>
 
         <ol>
@@ -310,8 +576,8 @@ python -m pytest test_login.py -v --html=reports/report.html --self-contained-ht
             </li>
         </ol>
 
-        <!-- Section 6: Troubleshooting & Platform-Specific Guidance -->
-        <h2>6. Troubleshooting & Platform-Specific Guidance</h2>
+        <!-- Section 7: Troubleshooting & Platform-Specific Guidance -->
+        <h2>7. Troubleshooting & Platform-Specific Guidance</h2>
         
         <div class="success">
             <strong>✅ SOLVED ISSUES:</strong> The following issues have been resolved in the current implementation:
@@ -426,8 +692,8 @@ python -m pytest test_login.py -v --html=reports/report.html --self-contained-ht
             <li><b>Stability:</b> Retry logic ensures tests don't fail due to temporary element issues</li>
         </ul>
 
-        <!-- Section 7: Official Documentation References -->
-        <h2>7. Official Documentation References</h2>
+        <!-- Section 8: Official Documentation References -->
+        <h2>8. Official Documentation References</h2>
         <p>For more detailed information and troubleshooting:</p>
 
         <ul>
