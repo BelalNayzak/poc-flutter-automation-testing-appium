@@ -1,5 +1,15 @@
 # Login App POC with Appium Testing
 
+---
+
+🚀 **Documentation & Step-by-Step Guide** 🚀
+
+> **🟢 I've made a clear step-by-step guide for this project (Flutter + Appium + Automation Testing) and hosted it in the below link for a complete setup, troubleshooting, and cross-platform (Android & iOS) test instructions:**
+> 
+> **https://belalnayzak.github.io/poc-flutter-automation-testing-appium/**
+
+---
+
 This is a Flutter application with a simple login screen that includes automated testing using Appium and Python.
 
 ## App Features
