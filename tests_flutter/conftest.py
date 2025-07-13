@@ -44,12 +44,17 @@ def driver_android(request):
     options.set_capability("automationName", "Flutter")
     options.set_capability("app", Config.ANDROID_APK_PATH)
     options.set_capability("autoGrantPermissions", True)
+    options.set_capability("fastReset", True)
+    options.set_capability("skipUninstall", True)
     # options.set_capability("noReset", True) # uncomment if need to disable app reset
 
     attempt = 0
     while attempt < Config.MAX_RETRIES:
         try:
             driver = webdriver.Remote("http://127.0.0.1:4723", options=options)
+            # Wait for app to load
+            driver.implicitly_wait(10)
+            time.sleep(3)  # Additional wait for Flutter app to initialize
             yield driver
             break
         except WebDriverException as e:

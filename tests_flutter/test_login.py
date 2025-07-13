@@ -12,6 +12,9 @@ class TestLogin:
         """Test that all login screen elements are displayed"""
         login_page = LoginPage(driver_android)
 
+        # Wait a bit more for the app to fully load
+        time.sleep(3)
+        
         # Verify login screen is displayed
         assert login_page.is_login_screen_displayed(), "Login screen should be displayed"
 
@@ -21,6 +24,9 @@ class TestLogin:
     def test_empty_phone_validation(self, driver_android, platform):
         """Test validation for empty phone field"""
         login_page = LoginPage(driver_android)
+
+        # Wait for app to load
+        time.sleep(2)
 
         # Leave phone field empty, enter password
         login_page.enter_password(Config.VALID_PASSWORD)
@@ -39,6 +45,9 @@ class TestLogin:
         """Test validation for empty password field"""
         login_page = LoginPage(driver_android)
         
+        # Wait for app to load
+        time.sleep(2)
+        
         # Enter phone, leave password empty
         login_page.enter_phone_number(Config.VALID_PHONE)
         login_page.click_login_button()
@@ -55,6 +64,9 @@ class TestLogin:
     def test_invalid_phone_validation(self, driver_android, platform):
         """Test validation for invalid phone number"""
         login_page = LoginPage(driver_android)
+        
+        # Wait for app to load
+        time.sleep(2)
         
         # Enter invalid phone number
         login_page.enter_phone_number(Config.INVALID_PHONE)
@@ -74,6 +86,9 @@ class TestLogin:
         """Test validation for invalid password"""
         login_page = LoginPage(driver_android)
         
+        # Wait for app to load
+        time.sleep(2)
+        
         # Enter valid phone but invalid password
         login_page.enter_phone_number(Config.VALID_PHONE)
         login_page.enter_password(Config.INVALID_PASSWORD)
@@ -91,6 +106,9 @@ class TestLogin:
     def test_successful_login(self, driver_android, platform):
         """Test successful login with valid credentials"""
         login_page = LoginPage(driver_android)
+        
+        # Wait for app to load
+        time.sleep(2)
         
         # Verify login screen is displayed
         assert login_page.is_login_screen_displayed(), "Login screen should be displayed"
