@@ -80,9 +80,11 @@ def driver_ios():
     options = AppiumOptions()
     options.set_capability("platformName", Config.IOS_PLATFORM_NAME)
     options.set_capability("deviceName", Config.IOS_DEVICE_NAME)
-    options.set_capability("automationName", "XCUITest") # You must use XCUITest for automationName on iOS not Flutter
+    options.set_capability("automationName", "Flutter")  # Use Flutter for Flutter apps
     options.set_capability("app", Config.IOS_APP_PATH)
     options.set_capability("autoGrantPermissions", True)
+    options.set_capability("fastReset", True)
+    options.set_capability("skipUninstall", True)
     # options.set_capability("noReset", True) # uncomment if need to disable app reset
 
     attempt = 0
@@ -90,7 +92,9 @@ def driver_ios():
     while attempt < Config.MAX_RETRIES:
         try:
             driver = webdriver.Remote(Config.APPIUM_SERVER_URL, options=options)
-            driver.implicitly_wait(30)
+            # Wait for app to load
+            driver.implicitly_wait(10)
+            time.sleep(3)  # Additional wait for Flutter app to initialize
             yield driver
             break
         except WebDriverException as e:
