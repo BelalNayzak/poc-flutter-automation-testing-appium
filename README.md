@@ -210,7 +210,7 @@ Test reports are generated in `tests/reports/report.html` after running tests.
 To add new test cases:
 
 1. Add new test methods to `test_login.py`
-2. Use the `LoginPage` class methods for interaction
+2. Use the `LoginPagePom` class methods for interaction
 3. Follow the existing test pattern with assertions
 4. Add new page objects if testing additional screens
 

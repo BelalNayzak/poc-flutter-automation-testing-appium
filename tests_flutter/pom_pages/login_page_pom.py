@@ -11,7 +11,7 @@ class FlutterElement(WebElement):
         super(FlutterElement, self).__init__(driver, element_id)
 
 
-class LoginPage:
+class LoginPagePom:
     """Page Object Model for Login Screen (Flutter selectors)"""
     
     def __init__(self, driver):

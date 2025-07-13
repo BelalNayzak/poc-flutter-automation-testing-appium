@@ -5,7 +5,7 @@ from selenium.common.exceptions import TimeoutException
 import time
 
 
-class LoginPage:
+class LoginPagePom:
     """Page Object Model for Login Screen"""
     
     def __init__(self, driver):
