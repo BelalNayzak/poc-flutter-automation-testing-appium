@@ -266,21 +266,21 @@ source tests_flutter/venv/bin/activate
 cd tests_flutter
 
 # Run the tests
-python run_tests.py</code></pre>
+python run_tests.py -v</code></pre>
                 <div class="note">
                   <strong>Customizations:</strong><br>
                   <ul>
                     <li><b>Specify Platform:</b> To run tests for a specific platform, add <code>--platform android</code> or <code>--platform ios</code>.<br>
                       Example:<br>
-                      <pre><code>python run_tests.py --platform android</code></pre>
+                      <pre><code>python run_tests.py -v --platform android</code></pre>
                     </li>
                     <li><b>Generate HTML Report:</b> To output results to an HTML file, add <code>--html=report.html --self-contained-html</code>.<br>
                       Example:<br>
-                      <pre><code>python run_tests.py --html=report.html --self-contained-html</code></pre>
+                      <pre><code>python run_tests.py -v --html=report.html --self-contained-html</code></pre>
                     </li>
                     <li><b>Combine Both:</b> You can combine both options:<br>
                       Example:<br>
-                      <pre><code>python run_tests.py --platform ios --html=report.html --self-contained-html</code></pre>
+                      <pre><code>python run_tests.py -v --platform ios --html=report.html --self-contained-html</code></pre>
                     </li>
                   </ul>
                 </div>

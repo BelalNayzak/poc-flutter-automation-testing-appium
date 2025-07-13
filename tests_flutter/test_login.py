@@ -1,24 +1,32 @@
 import pytest
 import time
-from pages.login_page import LoginPage
+from pom_pages.login_page_pom import LoginPagePom
 from conftest import Config
 
 
 class TestLogin:
     """Test cases for login functionality"""
     
-    def test_login_screen_elements_displayed(self, login_page):
+    @pytest.mark.parametrize("platform", ["android"], indirect=True)
+    def test_login_screen_elements_displayed(self, driver_android, platform):
         """Test that all login screen elements are displayed"""
-        # login_page = LoginPage(driver_android) # Removed, now injected
+        login_page = LoginPagePom(driver_android)
 
+        # Wait a bit more for the app to fully load
+        time.sleep(3)
+        
         # Verify login screen is displayed
         assert login_page.is_login_screen_displayed(), "Login screen should be displayed"
 
         print("✅ Login screen elements are displayed correctly")
 
-    def test_empty_phone_validation(self, login_page):
+    @pytest.mark.parametrize("platform", ["android"], indirect=True)
+    def test_empty_phone_validation(self, driver_android, platform):
         """Test validation for empty phone field"""
-        # login_page = LoginPage(driver_android) # Removed, now injected
+        login_page = LoginPagePom(driver_android)
+
+        # Wait for app to load
+        time.sleep(2)
 
         # Leave phone field empty, enter password
         login_page.enter_password(Config.VALID_PASSWORD)
@@ -32,9 +40,13 @@ class TestLogin:
 
         print(f"✅ Empty phone validation test passed: {error_message}")
     
-    def test_empty_password_validation(self, login_page):
+    @pytest.mark.parametrize("platform", ["android"], indirect=True)
+    def test_empty_password_validation(self, driver_android, platform):
         """Test validation for empty password field"""
-        # login_page = LoginPage(driver_android) # Removed, now injected
+        login_page = LoginPagePom(driver_android)
+        
+        # Wait for app to load
+        time.sleep(2)
         
         # Enter phone, leave password empty
         login_page.enter_phone_number(Config.VALID_PHONE)
@@ -48,9 +60,13 @@ class TestLogin:
         
         print(f"✅ Empty password validation test passed: {error_message}")
     
-    def test_invalid_phone_validation(self, login_page):
+    @pytest.mark.parametrize("platform", ["android"], indirect=True)
+    def test_invalid_phone_validation(self, driver_android, platform):
         """Test validation for invalid phone number"""
-        # login_page = LoginPage(driver_android) # Removed, now injected
+        login_page = LoginPagePom(driver_android)
+        
+        # Wait for app to load
+        time.sleep(2)
         
         # Enter invalid phone number
         login_page.enter_phone_number(Config.INVALID_PHONE)
@@ -65,9 +81,13 @@ class TestLogin:
 
         print(f"✅ Invalid phone validation test passed: {error_message}")
     
-    def test_invalid_password_validation(self, login_page):
+    @pytest.mark.parametrize("platform", ["android"], indirect=True)
+    def test_invalid_password_validation(self, driver_android, platform):
         """Test validation for invalid password"""
-        # login_page = LoginPage(driver_android) # Removed, now injected
+        login_page = LoginPagePom(driver_android)
+        
+        # Wait for app to load
+        time.sleep(2)
         
         # Enter valid phone but invalid password
         login_page.enter_phone_number(Config.VALID_PHONE)
@@ -82,9 +102,13 @@ class TestLogin:
         
         print(f"✅ Invalid password validation test passed: {error_message}")
 
-    def test_successful_login(self, login_page):
+    @pytest.mark.parametrize("platform", ["android"], indirect=True)
+    def test_successful_login(self, driver_android, platform):
         """Test successful login with valid credentials"""
-        # login_page = LoginPage(driver_android) # Removed, now injected
+        login_page = LoginPagePom(driver_android)
+        
+        # Wait for app to load
+        time.sleep(2)
         
         # Verify login screen is displayed
         assert login_page.is_login_screen_displayed(), "Login screen should be displayed"

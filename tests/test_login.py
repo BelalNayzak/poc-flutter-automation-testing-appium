@@ -1,6 +1,6 @@
 import pytest
 import time
-from pages.login_page import LoginPage
+from pom_pages.login_page_pom import LoginPagePom
 from conftest import Config
 
 
@@ -10,7 +10,7 @@ class TestLogin:
     @pytest.mark.parametrize("platform", ["android"], indirect=True)
     def test_login_screen_elements_displayed(self, driver_android, platform):
         """Test that all login screen elements are displayed"""
-        login_page = LoginPage(driver_android)
+        login_page = LoginPagePom(driver_android)
         
         # Verify login screen is displayed
         assert login_page.is_login_screen_displayed(), "Login screen should be displayed"
@@ -20,7 +20,7 @@ class TestLogin:
     @pytest.mark.parametrize("platform", ["android"], indirect=True)
     def test_successful_login(self, driver_android, platform):
         """Test successful login with valid credentials"""
-        login_page = LoginPage(driver_android)
+        login_page = LoginPagePom(driver_android)
         
         # Verify login screen is displayed
         assert login_page.is_login_screen_displayed(), "Login screen should be displayed"
@@ -38,7 +38,7 @@ class TestLogin:
     @pytest.mark.parametrize("platform", ["android"], indirect=True)
     def test_empty_phone_validation(self, driver_android, platform):
         """Test validation for empty phone field"""
-        login_page = LoginPage(driver_android)
+        login_page = LoginPagePom(driver_android)
         
         # Leave phone field empty, enter password
         login_page.enter_password(Config.VALID_PASSWORD)
@@ -55,7 +55,7 @@ class TestLogin:
     @pytest.mark.parametrize("platform", ["android"], indirect=True)
     def test_empty_password_validation(self, driver_android, platform):
         """Test validation for empty password field"""
-        login_page = LoginPage(driver_android)
+        login_page = LoginPagePom(driver_android)
         
         # Enter phone, leave password empty
         login_page.enter_phone_number(Config.VALID_PHONE)
@@ -72,7 +72,7 @@ class TestLogin:
     @pytest.mark.parametrize("platform", ["android"], indirect=True)
     def test_invalid_phone_validation(self, driver_android, platform):
         """Test validation for invalid phone number"""
-        login_page = LoginPage(driver_android)
+        login_page = LoginPagePom(driver_android)
         
         # Enter invalid phone number
         login_page.enter_phone_number(Config.INVALID_PHONE)
@@ -90,7 +90,7 @@ class TestLogin:
     @pytest.mark.parametrize("platform", ["android"], indirect=True)
     def test_invalid_password_validation(self, driver_android, platform):
         """Test validation for invalid password"""
-        login_page = LoginPage(driver_android)
+        login_page = LoginPagePom(driver_android)
         
         # Enter valid phone but invalid password
         login_page.enter_phone_number(Config.VALID_PHONE)
@@ -108,7 +108,7 @@ class TestLogin:
     @pytest.mark.parametrize("platform", ["android"], indirect=True) 
     def test_multiple_login_attempts(self, driver_android, platform):
         """Test multiple login attempts in sequence"""
-        login_page = LoginPage(driver_android)
+        login_page = LoginPagePom(driver_android)
         
         # First attempt with invalid data
         login_page.perform_login(Config.INVALID_PHONE, Config.INVALID_PASSWORD)

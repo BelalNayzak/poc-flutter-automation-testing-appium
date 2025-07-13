@@ -78,8 +78,8 @@ def login_page(request):
     else:
         driver = request.getfixturevalue('driver_ios')
     
-    from pages.login_page import LoginPage
-    return LoginPage(driver)
+    from pages.login_page import LoginPagePom
+    return LoginPagePom(driver)
 
 
 def pytest_addoption(parser):
