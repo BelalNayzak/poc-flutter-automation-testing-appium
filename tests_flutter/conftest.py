@@ -31,8 +31,10 @@ class Config:
     IOS_APP_PATH = "/Users/mazeed/StudioProjects/appium_testing_poc/build/ios/iphonesimulator/Runner.app"  # Path to built iOS app
 
     # Test data for login
-    VALID_PHONE = "1234567890"
+    VALID_EMAIL = "belal.nayzak@gmail.com"
+    VALID_PHONE = "01102288599"
     VALID_PASSWORD = "password123"
+    INVALID_EMAIL = "BelalNayzak"
     INVALID_PHONE = "123"
     INVALID_PASSWORD = "123"
 
@@ -108,7 +110,7 @@ def driver_ios():
 
 
 @pytest.fixture
-def login_page(request, platform):
+def login_page_pom(request, platform):
     """Fixture to provide a LoginPagePom instance for the current platform."""
     if platform == "android":
         driver = request.getfixturevalue('driver_android')

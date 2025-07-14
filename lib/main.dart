@@ -64,12 +64,15 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
+
   bool _isLoading = false;
+  String? _emailError;
   String? _phoneError;
   String? _passwordError;
-
+  
   @override
   void dispose() {
     _phoneController.dispose();
@@ -79,12 +82,29 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLogin() async {
     setState(() {
+      _emailError = null;
       _phoneError = null;
       _passwordError = null;
     });
+
+    final email = _emailController.text.trim();
     final phone = _phoneController.text.trim();
     final password = _passwordController.text;
+    
     bool hasError = false;
+
+    if (email.isEmpty) {
+      setState(() {
+        _emailError = 'Please enter your email';
+      });
+      hasError = true;
+    } else if (!RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(email)) {
+      setState(() {
+        _emailError = 'Invalid email';
+      });
+      hasError = true;
+    }
+
     if (phone.isEmpty) {
       setState(() {
         _phoneError = 'Please enter your phone number';
@@ -96,6 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       hasError = true;
     }
+   
     if (password.isEmpty) {
       setState(() {
         _passwordError = 'Please enter your password';
@@ -107,15 +128,23 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       hasError = true;
     }
+
     if (hasError) return;
 
     setState(() {
       _isLoading = true;
     });
+
     await Future.delayed(const Duration(seconds: 5));
+
     setState(() {
       _isLoading = false;
     });
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Success Login!")));
+    }
+
     // if (mounted) {
     //   Navigator.of(context).push(
     //     MaterialPageRoute(builder: (context) => const SuccessScreen()),
@@ -137,6 +166,8 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              
+              /// welcome text
               const Text(
                 'Welcome',
                 key: Key('welcome_text'),
@@ -145,7 +176,36 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              
               const SizedBox(height: 40),
+
+              /// email field
+              TextFormField(
+                key: const Key('email_field'),
+                controller: _emailController,
+                keyboardType: TextInputType.phone,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  hintText: 'Enter your email',
+                  prefixIcon: Icon(Icons.phone),
+                  border: OutlineInputBorder(),
+                ),
+                // No validator here
+              ),
+              if (_emailError != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: Text(
+                    _emailError!,
+                    key: const Key('email_validation_error'),
+                    style: const TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                ),
+              
+              const SizedBox(height: 16),
+              
+
+              /// phone field
               TextFormField(
                 key: const Key('phone_field'),
                 controller: _phoneController,
@@ -167,7 +227,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: const TextStyle(color: Colors.red, fontSize: 14),
                   ),
                 ),
+              
               const SizedBox(height: 16),
+              
+              /// password field
               TextFormField(
                 key: const Key('password_field'),
                 controller: _passwordController,
@@ -189,7 +252,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: const TextStyle(color: Colors.red, fontSize: 14),
                   ),
                 ),
+             
               const SizedBox(height: 24),
+             
+              /// login button
               SizedBox(
                 width: double.infinity,
                 height: 48,
@@ -211,6 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                 ),
               ),
+
             ],
           ),
         ),

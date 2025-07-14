@@ -13,7 +13,7 @@ class FlutterElement(WebElement):
 
 
 class LoginPagePom:
-    """Page Object Model for the Flutter Login Screen, using Flutter selectors."""
+    """Page Object Model for the Flutter Login Screen, using Flutter selectors. (acts as an actuator class)"""
     
     def __init__(self, driver):
         """Initialize with Appium driver and FlutterFinder instance."""
@@ -47,6 +47,17 @@ class LoginPagePom:
         except Exception as e:
             print(f"Error checking login screen: {e}")
             return False
+
+    def enter_email(self, email):
+        """Enter the email into the email field"""
+        try:
+            email_field = self._find_element_with_retry(self.finder.by_value_key('email_field'))
+            email_field.clear()
+            email_field.send_keys(email)
+        except Exception as e:
+            print(f"Error entering email: {e}")
+            raise
+        return self
 
     def enter_phone_number(self, phone_number):
         """Enter a phone number into the phone field."""
@@ -117,6 +128,14 @@ class LoginPagePom:
         except Exception:
             return None
     
+    def get_email_field_text(self):
+        try:
+            email_field = self._find_element_with_retry(self.finder.by_value_key('email_field'))
+            return email_field.text
+        except Exception as e:
+            print(f"Error getting email field text: {e}")
+            return ""
+
     def get_phone_field_text(self):
         try:
             phone_field = self._find_element_with_retry(self.finder.by_value_key('phone_field'))
@@ -147,7 +166,8 @@ class LoginPagePom:
     def is_success_message_displayed(self):
         return self.get_success_message_text() is not None
     
-    def perform_login(self, phone_number, password):
+    def perform_login(self, email, phone_number, password):
+        self.enter_email(email)
         self.enter_phone_number(phone_number)
         self.enter_password(password)
         self.click_login_button()
