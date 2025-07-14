@@ -40,8 +40,8 @@ APPIUM_PID=$!
 sleep 5
 
 # 6. Run Python tests
-source tests_flutter/venv/bin/activate
-cd tests_flutter
+source test/appium/venv/bin/activate
+cd test/appium
 python run_tests.py
 TEST_EXIT_CODE=$?
 cd ..

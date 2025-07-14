@@ -25,7 +25,7 @@ This is a Flutter application with a simple login screen that includes automated
 appium_testing_poc/
 ├── lib/
 │   └── main.dart                 # Flutter app with login screen
-├── tests_flutter/
+├── test/appium/
 │   ├── pom_pages/
 │   │   └── login_page_pom.py        # Page Object Model for login screen
 │   ├── conftest.py              # Test configuration and fixtures

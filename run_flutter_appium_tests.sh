@@ -42,8 +42,8 @@ sleep 5
 
 # 6. Activate venv and run tests
 echo "[INFO] Running Python Appium tests..."
-source tests_flutter/venv/bin/activate
-python tests_flutter/run_tests.py
+source test/appium/venv/bin/activate
+python test/appium/run_tests.py
 TEST_RESULT=$?
 
 echo "[INFO] Cleaning up..."
