@@ -5,21 +5,29 @@ import time
 
 
 class FlutterElement(WebElement):
-    """Custom FlutterElement that's compatible with current Selenium version"""
+    """Custom wrapper for Flutter elements compatible with Selenium/WebDriver."""
     
     def __init__(self, driver, element_id):
+        """Initialize a FlutterElement with driver and element ID."""
         super(FlutterElement, self).__init__(driver, element_id)
 
 
 class LoginPagePom:
-    """Page Object Model for Login Screen (Flutter selectors)"""
+    """Page Object Model for the Flutter Login Screen, using Flutter selectors."""
     
     def __init__(self, driver):
-        self.driver = driver
-        self.finder = FlutterFinder()
+        """Initialize with Appium driver and FlutterFinder instance."""
+        self.driver = driver  # Appium driver instance
+        self.finder = FlutterFinder()  # FlutterFinder for locating widgets
         
     def _find_element_with_retry(self, finder_method, max_retries=3):
-        """Find element with retry logic to handle stale references"""
+        """Find an element with retry logic to handle stale references.
+        Args:
+            finder_method: The finder method to locate the element.
+            max_retries: Number of retry attempts for stale elements.
+        Returns:
+            FlutterElement if found, else raises last exception.
+        """
         for attempt in range(max_retries):
             try:
                 element = FlutterElement(self.driver, finder_method)
@@ -31,18 +39,17 @@ class LoginPagePom:
         return None
         
     def is_login_screen_displayed(self):
+        """Check if the login screen is displayed by finding the welcome text widget."""
         try:
-            # Wait a bit for the app to load
-            time.sleep(3)
-            # Try to find the welcome text using Flutter finder
+            time.sleep(3)  # Wait for the app to load
             welcome = self._find_element_with_retry(self.finder.by_value_key('welcome_text'))
-            # Just check if the element exists, don't call is_displayed()
             return welcome is not None
         except Exception as e:
             print(f"Error checking login screen: {e}")
             return False
 
     def enter_phone_number(self, phone_number):
+        """Enter a phone number into the phone field."""
         try:
             phone_field = self._find_element_with_retry(self.finder.by_value_key('phone_field'))
             phone_field.clear()
@@ -53,6 +60,7 @@ class LoginPagePom:
         return self
     
     def enter_password(self, password):
+        """Enter a password into the password field."""
         try:
             password_field = self._find_element_with_retry(self.finder.by_value_key('password_field'))
             password_field.clear()
