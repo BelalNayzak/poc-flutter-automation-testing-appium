@@ -164,17 +164,26 @@
                             <pre><code>cd /path/to/appium_testing_poc</code></pre>
                         </li>
                         <li>Create a Python virtual environment:
-                            <pre><code>python3 -m venv tests_flutter/venv</code></pre>
+                            <pre><code>python3 -m venv test/appium/venv</code></pre>
                         </li>
-                        <li>Activate the virtual environment:
-                            <pre><code># On macOS/Linux:
-source tests_flutter/venv/bin/activate
+                        <li>Activate the virtual environment and install all the required Python packages:
+                            <pre><code>
+# On macOS/Linux:
+source test/appium/venv/bin/activate
+pip install pytest pytest-html
+pip install Appium-Python-Client
+pip install appium-flutter-finder
+
 
 # On Windows:
-tests_flutter\venv\Scripts\activate</code></pre>
+test/appium\venv\Scripts\activate
+pip install pytest pytest-html
+pip install Appium-Python-Client
+pip install appium-flutter-finder
+                            </code></pre>
                         </li>
                         <li>Install required Python packages:
-                            <pre><code>cd tests_flutter
+                            <pre><code>cd test/appium
 pip install -r requirements.txt</code></pre>
                         </li>
                     </ol>
@@ -258,7 +267,7 @@ avdmanager create avd -n "Pixel_4_API_30" -k "system-images;android-30;google_ap
 
                     <h4>Step 7: Configure Test Environment</h4>
                     <ol>
-                        <li>Update device names in <code>tests_flutter/conftest.py</code>:
+                        <li>Update device names in <code>test/appium/conftest.py</code>:
                             <pre><code># For Android
 ANDROID_DEVICE_NAME = "emulator-5554"  # Your actual device name
 
@@ -299,7 +308,7 @@ IOS_APP_PATH = "/path/to/your/Runner.app"</code></pre>
                             </tr>
                             <tr>
                                 <td>Python virtual environment not activated</td>
-                                <td>Run <code>source tests_flutter/venv/bin/activate</code></td>
+                                <td>Run <code>source test/appium/venv/bin/activate</code></td>
                             </tr>
                             <tr>
                                 <td>Appium not installed</td>
@@ -343,7 +352,7 @@ IOS_APP_PATH = "/path/to/your/Runner.app"</code></pre>
                             </tr>
                             <tr>
                                 <td>Activate Python venv</td>
-                                <td><code>source tests_flutter/venv/bin/activate</code></td>
+                                <td><code>source test/appium/venv/bin/activate</code></td>
                                 <td>Activate the Python virtual environment</td>
                             </tr>
                             <tr>
@@ -466,7 +475,7 @@ TextFormField(
   // ...
 ),</code></pre>
 
-        <h3>Test Suite: <code>tests_flutter/</code></h3>
+        <h3>Test Suite: <code>test/appium/</code></h3>
         <table>
             <thead>
                 <tr>
@@ -547,10 +556,10 @@ http://127.0.0.1:60693/</code></pre>
 cd /path/to/appium_testing_poc
 
 # Activate venv
-source tests_flutter/venv/bin/activate
+source test/appium/venv/bin/activate
 
 # Go to tests directory
-cd tests_flutter
+cd test/appium
 
 # Run the tests for Android
 python -m pytest test_login.py -v --platform android
