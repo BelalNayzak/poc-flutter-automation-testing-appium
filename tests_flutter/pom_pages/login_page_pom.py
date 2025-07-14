@@ -143,7 +143,15 @@ class LoginPagePom:
         except Exception as e:
             print(f"Error getting phone field text: {e}")
             return ""
-    
+
+    def get_password_field_text(self):
+        try:
+            password_field = self._find_element_with_retry(self.finder.by_value_key('password_field'))
+            return password_field.text
+        except Exception as e:
+            print(f"Error getting password field text: {e}")
+            return ""
+
     def get_validation_error(self, key, timeout=10):
         start_time = time.time()
         while time.time() - start_time < timeout:

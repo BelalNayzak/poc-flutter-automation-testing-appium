@@ -89,7 +89,11 @@ class TestLogin:
         time.sleep(2)  # Wait for app to load
         assert login_page_pom.is_login_screen_displayed(), "Login screen should be displayed"
         login_page_pom.perform_login(Config.VALID_EMAIL, Config.VALID_PHONE, Config.VALID_PASSWORD)  # Perform login
+        email_text = login_page_pom.get_email_field_text()  # Get phone field value
         phone_text = login_page_pom.get_phone_field_text()  # Get phone field value
+        password_text = login_page_pom.get_password_field_text()  # Get phone field value
+        assert Config.VALID_EMAIL in email_text, f"Phone field should contain entered value: {email_text}"
         assert Config.VALID_PHONE in phone_text, f"Phone field should contain entered value: {phone_text}"
+        assert Config.VALID_PASSWORD in password_text, f"Phone field should contain entered value: {password_text}"
         print(f"✅ Successful login test passed - fields populated correctly")
     
