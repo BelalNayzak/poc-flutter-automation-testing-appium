@@ -14,7 +14,7 @@ This is a Flutter application with a simple login screen that includes automated
 
 ## App Features
 
-- Simple login screen with phone number and password fields
+- Simple login screen with email, phone number, and password fields
 - Form validation for empty fields and minimum length requirements
 - Loading indicator during login process
 - Success message display after login
@@ -27,8 +27,8 @@ appium_testing_poc/
   │   └── main.dart
   ├── test/
   │   ├── flutter/
-  │   |   ├── widget_test.dart
-  │   |   └── login_screen_test.dart
+  │   │   ├── widget_test.dart
+  │   │   └── login_screen_test.dart
   │   └── appium/
   │       ├── docs/...
   │       ├── reports/...
@@ -75,7 +75,7 @@ appium driver install xcuitest      # For iOS
 ### 2. Install Python Dependencies
 
 ```bash
-cd tests
+cd test/appium
 pip install -r requirements.txt
 ```
 
@@ -108,7 +108,7 @@ The server should start on `http://localhost:4723`
 
 ### 2. Update Configuration
 
-Edit `tests/conftest.py` to match your device configuration:
+Edit `test/appium/conftest.py` to match your device configuration:
 
 For Android:
 ```python
@@ -127,7 +127,7 @@ IOS_BUNDLE_ID = "com.example.appiumTestingPoc"
 #### Using the test runner (recommended):
 
 ```bash
-cd tests
+cd test/appium
 
 # Run all tests on Android
 python run_tests.py --platform android --verbose
@@ -142,7 +142,7 @@ python run_tests.py --test test_login.py --verbose
 #### Using pytest directly:
 
 ```bash
-cd tests
+cd test/appium
 
 # Run all tests
 pytest test_login.py -v -s --platform=android
@@ -155,23 +155,27 @@ pytest test_login.py::TestLogin::test_successful_login -v -s --platform=android
 
 The test suite includes the following test cases:
 
-1. **test_login_screen_elements_displayed** - Verifies all UI elements are visible
-2. **test_successful_login** - Tests login with valid credentials
-3. **test_empty_phone_validation** - Tests validation for empty phone field
-4. **test_empty_password_validation** - Tests validation for empty password field
-5. **test_invalid_phone_validation** - Tests validation for invalid phone number
-6. **test_invalid_password_validation** - Tests validation for invalid password
-7. **test_field_input_functionality** - Tests input field functionality
-8. **test_multiple_login_attempts** - Tests multiple login attempts
+1. **test_login_screen_elements_displayed** - Verifies all UI elements (welcome text, email, phone, password fields, login button) are visible
+2. **test_successful_login** - Tests login with valid credentials (email, phone, password)
+3. **test_empty_email_validation** - Tests validation for empty email field
+4. **test_invalid_email_validation** - Tests validation for invalid email format
+5. **test_empty_phone_validation** - Tests validation for empty phone field
+6. **test_invalid_phone_validation** - Tests validation for invalid phone number
+7. **test_empty_password_validation** - Tests validation for empty password field
+8. **test_invalid_password_validation** - Tests validation for invalid password
+9. **test_field_input_functionality** - Tests input field functionality for all fields
+10. **test_multiple_login_attempts** - Tests multiple login attempts and error resets
 
 ## Test Data
 
 Default test data is configured in `conftest.py`:
 
 ```python
+VALID_EMAIL = "test@example.com"
+INVALID_EMAIL = "invalid-email"
 VALID_PHONE = "1234567890"
-VALID_PASSWORD = "password123"
 INVALID_PHONE = "123"
+VALID_PASSWORD = "password123"
 INVALID_PASSWORD = "123"
 ```
 
@@ -220,7 +224,7 @@ xcrun simctl list apps booted
 
 ## Reports
 
-Test reports are generated in `tests/reports/report.html` after running tests.
+Test reports are generated in `test/appium/reports/report.html` after running tests.
 
 ## Extending Tests
 
@@ -236,8 +240,12 @@ To add new test cases:
 The Flutter app includes special keys for testing:
 
 - `Key('welcome_text')` - Welcome text
-- `Key('phone_field')` - Phone input field  
+- `Key('email_field')` - Email input field
+- `Key('email_validation_error')` - Email validation error text
+- `Key('phone_field')` - Phone input field
+- `Key('phone_validation_error')` - Phone validation error text
 - `Key('password_field')` - Password input field
+- `Key('password_validation_error')` - Password validation error text
 - `Key('login_button')` - Login button
 - `Key('loading_indicator')` - Loading spinner
 - `Key('login_success_snackbar')` - Success message
