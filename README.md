@@ -10,6 +10,14 @@
 
 ---
 
+> **📊 Gap Analysis: Flutter Test Suite vs. Appium**
+>
+> For a detailed comparison and gap analysis between Flutter's built-in test suite and Appium-based testing (strengths, limitations, and when to use each), see:
+>
+> **https://belalnayzak.github.io/gap-analysis-flutter-vs-appium/**
+
+---
+
 This is a Flutter application with a simple login screen that includes automated testing using Appium and Python.
 
 ## App Features
